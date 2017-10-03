@@ -38,6 +38,7 @@ router.post('/users/login', function(req, res, next){
 });
 
 router.get('/user', auth.required, function(req, res, next){
+
   User.findById(req.payload.id).then(function(user){
     if(!user){ return res.sendStatus(401); }
 
@@ -47,6 +48,7 @@ router.get('/user', auth.required, function(req, res, next){
 
 router.put('/user', auth.required, function(req, res, next){
   User.findById(req.payload.id).then(function(user){
+
     if (!user){return res.sendStatus(401);}
 
     if(typeof req.body.user.username !== 'undefined') {
@@ -68,7 +70,7 @@ router.put('/user', auth.required, function(req, res, next){
     return user.save().then(function(){
       return res.json({user: user.toAuthJSON()});
     });
-  })
+  }).catch(next);
 });
 
 module.exports = router;
